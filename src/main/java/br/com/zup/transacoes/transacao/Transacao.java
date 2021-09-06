@@ -1,10 +1,10 @@
 package br.com.zup.transacoes.transacao;
 
+import br.com.zup.transacoes.compartilhado.seguranca.HashCode;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,32 +14,46 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, updatable = false)
     private Long id;
-    @NotBlank
     private String idTransacaoRecebida;
-    @NotNull
     private BigDecimal valor;
-    @NotBlank
     private LocalDateTime efetivadaEm;
-    @NotBlank
     private String numeroCartao;
-    @Email
-    @NotBlank
+    private byte[] hashCartao;
     private String emailUsuarioLogado;
 
     @Embedded
-    private Estabelecimento estabelecimento;
+    private TransacaoEstabelecimento estabelecimento;
 
-    public Transacao(String idTransacaoRecebida, BigDecimal valor, LocalDateTime efetivadaEm, String numeroCartao, String emailUsuarioLogado, Estabelecimento estabelecimento) {
+    public Transacao(String idTransacaoRecebida, BigDecimal valor, LocalDateTime efetivadaEm, String numeroCartao,
+                     String emailUsuarioLogado, TransacaoEstabelecimento estabelecimento,
+                     HashCode hashCode) throws NoSuchAlgorithmException {
         this.idTransacaoRecebida = idTransacaoRecebida;
         this.valor = valor;
         this.efetivadaEm = efetivadaEm;
         this.numeroCartao = numeroCartao;
+        this.hashCartao = hashCode.gerarHash(numeroCartao);
         this.emailUsuarioLogado = emailUsuarioLogado;
         this.estabelecimento = estabelecimento;
     }
 
-    public Long getId() {
-        return id;
+    public String getIdTransacaoRecebida() {
+        return idTransacaoRecebida;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public LocalDateTime getEfetivadaEm() {
+        return efetivadaEm;
+    }
+
+    public String getEmailUsuarioLogado() {
+        return emailUsuarioLogado;
+    }
+
+    public TransacaoEstabelecimento getEstabelecimento() {
+        return estabelecimento;
     }
 
     @Deprecated

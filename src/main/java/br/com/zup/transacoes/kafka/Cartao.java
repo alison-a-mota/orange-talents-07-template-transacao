@@ -1,14 +1,11 @@
-package br.com.zup.transacoes.compartilhado.kafka;
+package br.com.zup.transacoes.kafka;
 
-import javax.validation.constraints.Email;
-
-public class ResponseCartao {
+public class Cartao {
 
     private String id;
-    @Email
     private String email;
 
-    public ResponseCartao(String id, String email) {
+    public Cartao(String id, String email) {
         this.id = id;
         this.email = email;
     }
@@ -19,5 +16,9 @@ public class ResponseCartao {
 
     public String getEmail() {
         return email;
+    }
+
+    @Deprecated
+    public Cartao() {
     }
 }
