@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
-    List<Transacao> findLast10ByHashCartao(byte[] cartaoId);
+    List<Transacao> findFirst10ByHashCartaoOrderByEfetivadaEmDesc(byte[] cartaoId);
 }
 

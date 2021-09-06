@@ -1,6 +1,7 @@
 package br.com.zup.transacoes.transacao;
 
 import br.com.zup.transacoes.compartilhado.seguranca.HashCode;
+import org.springframework.security.crypto.encrypt.Encryptors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,13 +25,17 @@ public class Transacao {
     @Embedded
     private TransacaoEstabelecimento estabelecimento;
 
+    /**
+     * @param hashCode Este construtor recebe um cartão em formato de String, converte em HashCode
+     *                 para comparações e validações e criptografa para usar os dados quando necessário.
+     */
     public Transacao(String idTransacaoRecebida, BigDecimal valor, LocalDateTime efetivadaEm, String numeroCartao,
                      String emailUsuarioLogado, TransacaoEstabelecimento estabelecimento,
                      HashCode hashCode) throws NoSuchAlgorithmException {
         this.idTransacaoRecebida = idTransacaoRecebida;
         this.valor = valor;
         this.efetivadaEm = efetivadaEm;
-        this.numeroCartao = numeroCartao;
+        this.numeroCartao = Encryptors.text("abcabc", "cbacba").encrypt(numeroCartao);
         this.hashCartao = hashCode.gerarHash(numeroCartao);
         this.emailUsuarioLogado = emailUsuarioLogado;
         this.estabelecimento = estabelecimento;

@@ -25,7 +25,7 @@ public class TransacaoController {
     @GetMapping("/cartao/{cartaoId}")
     public ResponseEntity<Stream> listaUltimasDez(@PathVariable String cartaoId) throws NoSuchAlgorithmException {
 
-        var lista = transacaoRepository.findLast10ByHashCartao(hashCode.gerarHash(cartaoId));
+        var lista = transacaoRepository.findFirst10ByHashCartaoOrderByEfetivadaEmDesc(hashCode.gerarHash(cartaoId));
 
         if (lista.isEmpty())
             return ResponseEntity.notFound().build();
